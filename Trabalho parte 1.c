@@ -720,7 +720,7 @@ int main(void) {
 
             scanf("%d", &vertice);
 
-            //BFS(matrizadj, n, vertice, qvertice);   
+            BFS(matrizadj, n, vertice, qvertice);   
 
 
         }
@@ -730,7 +730,7 @@ int main(void) {
 
             scanf("%d", &vertice);
 
-            //DFS(matrizadj, n, vertice, qvertice);        
+            DFS(matrizadj, n, vertice, qvertice);        
         }
 
         int grau_minimo = INT_MAX;
@@ -760,7 +760,7 @@ int main(void) {
         else mediana = (grauarray[n/2] + grauarray[n/2 - 1]) / 2.0;
 
 
-        //eccc(matrizadj, n, CC);
+        eccc(matrizadj, n, CC);
 
         fprintf(qvertice, "O grau mínimo é: %d \n", grau_minimo);
         fprintf(qvertice, "O grau máximo é: %d \n", grau_max);
@@ -809,7 +809,7 @@ int main(void) {
 
             scanf("%d", &vertice);
 
-            //BFSL(adjList, n, vertice, qvertice);   
+            BFSL(adjList, n, vertice, qvertice);   
 
         }
         if (strcmp(busca, "D") == 0){
@@ -818,7 +818,7 @@ int main(void) {
 
             scanf("%d", &vertice);
 
-            //DFSL_NaoRecursiva(adjList, vertice, n, qvertice);            
+            DFSL_NaoRecursiva(adjList, vertice, n, qvertice);            
         }
 
         int grau_minimo = INT_MAX;
@@ -844,7 +844,7 @@ int main(void) {
             }
         }
         media /= n;
-        //ecccLista(adjList, n, CC);  //COMPONENTE CONEXA
+        ecccLista(adjList, n, CC);  //COMPONENTE CONEXA
         qsort(arraygrau, n, sizeof(int), comparar);
         if (n % 2 != 0 ) mediana = arraygrau[(n+1)/2];
         else mediana = (arraygrau[(n/2) + 1] + arraygrau[n/2])/2;
@@ -856,26 +856,21 @@ int main(void) {
         diametroL(adjList, n, qvertice);
 
         for (int i = 0; i < n; i++) {    // Libere a memória depois de usar
-        Node* temp = adjList[i];
-        while (temp) {
-            Node* toDelete = temp;
-            temp = temp->next;
-            free(toDelete);
-    
-        }
+            Node* temp = adjList[i];
+            while (temp) {
+                Node* toDelete = temp;
+                temp = temp->next;
+                free(toDelete);
+        
+            }
         }
     }
 
     fprintf(qvertice, "O número de arestas desse grafo é: %d\n", m); // número de arestas no arquivo de saída
 
-
-    //calculaMemoriaMatriz(n);
-    //calculaMemoriaLista(n, m);
-
     // Fechando os arquivos
     fclose(qvertice);
     fclose(grafo);
-
 
     return 0;
 }
