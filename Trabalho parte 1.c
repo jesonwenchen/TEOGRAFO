@@ -81,7 +81,6 @@ void eccc(int** matriz, int n, FILE* qvertice){
 void DFScompLista(Node* lista[], int vertice, int visitados[], int componenteatual[], int numcomp, FILE* qvertice, int* tamanhoC){
     visitados[vertice] = 1;
     componenteatual[vertice] = numcomp;
-    //fprintf(qvertice, "%d ", vertice + 1);
     Node* ponteiro = lista[vertice];
     tamanhoC[numcomp]++;
     
@@ -104,13 +103,8 @@ void ecccLista(Node* lista[], int n, FILE* qvertice){
         if (!visitados[i]) {
 
             DFScompLista(lista, i, visitados, componenteAtual, numComponentes, qvertice, tamanhoC);
-            numComponentes++;  // Nova componente encontrada
+            numComponentes++;  
 
-            //fprintf(qvertice, "Componente %d: ", numComponentes);
-
-            // Chama DFS para encontrar todos os vértices da componente
-
-            //fprintf(qvertice, "\n");  // Nova linha após imprimir a componente
         }
     }
     int* ordem = (int*)malloc(numComponentes * sizeof(int));
@@ -244,10 +238,10 @@ void BFS(int** matriz, int n, int inicialvertx, FILE* qvertice){
     addfila(fila, inicialvertx - 1); // colocando esse vertice na fila.
 
     while (!Vazio(fila)) { // enquanto a fila nao ficar vazia rola...
-        int verticeatual = kickfila(fila); // primeiro a sair da fila, vulgo head.
+        int verticeatual = kickfila(fila); 
 
         for (int i = 0; i < n; i++){
-            if (matriz[verticeatual][i] == 1 && !visitados[i]) { // não precisa explicar o obvio ne.
+            if (matriz[verticeatual][i] == 1 && !visitados[i]) { 
                 visitados[i] = 1; // atualizando tudo...
                 pai[i] = verticeatual;
                 nivel[i] = nivel[verticeatual] + 1;
@@ -283,7 +277,7 @@ void BFSL(Node* lista[], int n, int inicialvertx, FILE* qvertice){
     addfila(fila, inicialvertx - 1); // colocando esse vertice na fila.
     
     while (!Vazio(fila)) { 
-        int verticeatual = kickfila(fila); // retirando o proximo, head
+        int verticeatual = kickfila(fila); 
         Node* ponteiro = lista[verticeatual]; // criando um ponteiro node, para apontar para lista adj do vertice atual
 
         while (ponteiro){ // até ficar com valor NULL
@@ -374,7 +368,7 @@ void DFSL_NaoRecursiva(Node* lista[], int vertice, int n, FILE* qvertice) {
     free(nivel);
 }
 
-void addEdgeToAdjList(Node** adjList, int src, int dest) {// Função para adicionar um vértice à lista de adjacência
+void addEdgeToAdjList(Node** adjList, int src, int dest) {
     Node* newNode = (Node*)malloc(sizeof(Node));
     newNode->vertex = dest;
     Node* current = adjList[src];
@@ -441,7 +435,7 @@ int primitivaBFSL(Node* lista[], int n, int inicialvertx){
     
     while (!Vazio(fila)) { 
         int maiornivel = 0;
-        int verticeatual = kickfila(fila); // retirando o proximo, head
+        int verticeatual = kickfila(fila); 
         Node* ponteiro = lista[verticeatual]; // criando um ponteiro node, para apontar para lista adj do vertice atual
 
         while (ponteiro){ // até ficar com valor NULL
@@ -476,12 +470,12 @@ void AproxDiametroL(Node* lista[], int n, FILE* qvertice){
     addfila(fila, vertice); // colocando esse vertice na fila.
 
     while (!Vazio(fila)) { // enquanto a fila nao ficar vazia rola...
-        int verticeatual = kickfila(fila); // primeiro a sair da fila, vulgo head.
+        int verticeatual = kickfila(fila); 
         Node* ponteiro = lista[verticeatual];
         while (ponteiro) {
             int outrovertice = ponteiro->vertex;
-            if (!visitados[outrovertice]) { // não precisa explicar o obvio ne.
-                visitados[outrovertice] = 1; // atualizando tudo...
+            if (!visitados[outrovertice]) { 
+                visitados[outrovertice] = 1; 
                 nivel[outrovertice] = nivel[verticeatual] + 1;
                 addfila(fila, outrovertice); // aqui coloco esse vizinho na minha queue
                 if (nivel[outrovertice] > maiornivel) maiornivel = nivel[outrovertice];         
@@ -535,16 +529,16 @@ void distancia(int**matriz, int n, int vertice1, int vertice2 , FILE* qvertice){
     for (int i = 0; i < n; i++){
         nivel[i] = -1;
     }
-    Fila* fila = criandofila(n); // criando uma fila 
-    visitados[vertice1 - 1] = 1; // marcando como visitado o vertice inicial
+    Fila* fila = criandofila(n); 
+    visitados[vertice1 - 1] = 1; 
     nivel[vertice1 - 1] = 0; //raiz nivel zero
     addfila(fila, vertice1 - 1); // colocando esse vertice na fila.
 
     while (!Vazio(fila)) { // enquanto a fila nao ficar vazia rola...
-        int verticeatual = kickfila(fila); // primeiro a sair da fila, vulgo head.
+        int verticeatual = kickfila(fila); 
 
         for (int i = 0; i < n; i++){
-            if (matriz[verticeatual][i] == 1 && !visitados[i]) { // não precisa explicar o obvio ne.
+            if (matriz[verticeatual][i] == 1 && !visitados[i]) { 
                 visitados[i] = 1; // atualizando tudo...
                 nivel[i] = nivel[verticeatual] + 1;
                 addfila(fila, i); // aqui coloco esse vizinho na minha queue
@@ -580,9 +574,9 @@ int primitivaBFS(int**matriz, int n, int inicialvertx){
     addfila(fila, inicialvertx - 1); // colocando esse vertice na fila.
 
     while (!Vazio(fila)) { // enquanto a fila nao ficar vazia rola...
-        int verticeatual = kickfila(fila); // primeiro a sair da fila, vulgo head.
+        int verticeatual = kickfila(fila); 
         for (int i = 0; i < n; i++){
-            if (matriz[verticeatual][i] == 1 && !visitados[i]) { // não precisa explicar o obvio ne.
+            if (matriz[verticeatual][i] == 1 && !visitados[i]) {
                 visitados[i] = 1; // atualizando tudo...
                 nivel[i] = nivel[verticeatual] + 1;
                 addfila(fila, i); // aqui coloco esse vizinho na minha queue
@@ -610,9 +604,9 @@ void AproxDiametro(int** matriz, int n, FILE* qvertice){
     addfila(fila, vertice); // colocando esse vertice na fila.
 
     while (!Vazio(fila)) { // enquanto a fila nao ficar vazia rola...
-        int verticeatual = kickfila(fila); // primeiro a sair da fila, vulgo head.
+        int verticeatual = kickfila(fila); 
         for (int i = 0; i < n; i++){
-            if (matriz[verticeatual][i] == 1 && !visitados[i]) { // não precisa explicar o obvio ne.
+            if (matriz[verticeatual][i] == 1 && !visitados[i]) { 
                 visitados[i] = 1; // atualizando tudo...
                 nivel[i] = nivel[verticeatual] + 1;
                 addfila(fila, i); // aqui coloco esse vizinho na minha queue
@@ -641,7 +635,7 @@ void diametro(int**matriz, int n, FILE* qvertice){ // realizer BFS em TODOS os v
             while(!Vazio(fila)){
                 int verticefila = kickfila(fila);
                 for (int i = 0; i < n; i++){
-                    if (matriz[verticefila][i] == 1 && !visitados[i]) { // não precisa explicar o obvio ne.
+                    if (matriz[verticefila][i] == 1 && !visitados[i]) { 
                         visitados[i] = 1; // atualizando tudo...
                         nivel[i] = nivel[verticefila] + 1;
                         addfila(fila, i); // aqui coloco esse vizinho na minha queue
