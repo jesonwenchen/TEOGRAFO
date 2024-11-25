@@ -33,13 +33,13 @@ Node** Lista_Sem_Peso(FILE* grafo, int* n, FILE* qvertice);
 
 void Graus_Lista(FILE* qvertice, int n, Node* listaadj[]);
 
-void criando_lista_peso(Node** adjList, int a, int b, float peso) 
+void criando_lista_peso(Node** adjList, int a, int b, float peso);
 
-Node** lista_peso(FILE*grafo, int* n, FILE* qvertice)
+Node** lista_peso(FILE*grafo, int* n, FILE* qvertice);
 
-void Dijkstra_Lista(Node* lista[], int vertx, int n, FILE*qvertice)
+void Dijkstra_Lista(Node* lista[], int vertx, int n, FILE*qvertice);
 
-void Dijkstra_Lista_Heap(float** matriz, int vertx, int n, FILE* qvertice)
+void Dijkstra_Lista_Heap(float** matriz, int vertx, int n, FILE* qvertice);
 
 
 
