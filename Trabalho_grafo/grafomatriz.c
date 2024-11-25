@@ -341,3 +341,127 @@ int** Matriz_Sem_Peso(FILE*grafo, int* n, FILE* qvertice){
     fprintf(qvertice, "O número de arestas do grafo é %d: \n", m);
     return matriz;
 }
+
+float** matrizpeso(FILE*grafo, int* n, FILE* qvertice){
+    if (grafo == NULL){
+        printf("Erro ao abrir\n");
+        return NULL;
+    }
+    if (fscanf(grafo, "%d", n) != 1){
+        printf("Erro ao ler o número de vértices\n");
+        return NULL;
+    }
+    float** matriz = (float**)malloc(*n * sizeof(float*));
+    for (int i = 0; i < *n; i++){
+        matriz[i] = (float*)malloc(*n*sizeof(float));
+        for (int j = 0; j < *n; j++){
+            if (i == j){
+                matriz[i][j] = 0;
+            } else {
+                matriz[i][j] = FLT_MAX;
+            }
+        }
+    }
+    int i, j; 
+    float peso;
+    
+    while(fscanf(grafo, "%d %d %f", &i, &j, &peso) == 3){
+        if (peso < 0) {
+            fprintf(qvertice,"A biblioteca ainda não implementa caminhos mínimos com pesos negativos \n");
+            return NULL;
+        }
+        else {  
+            matriz[i - 1][j - 1] = peso;
+            matriz[j - 1][i - 1] = peso;
+        }
+    }
+    return matriz;
+}
+
+void Dijkstra_Matriz(float**matriz, int vertx, int n, FILE*qvertice){
+    float* dist = (float*)malloc(n * sizeof(float));
+    int* VS = (int*)malloc(n * sizeof(int));
+    int* pai = (int*)malloc(n * sizeof(int));
+
+    for (int i = 0; i < n; i++){
+        pai[i] = -1;
+        dist[i] = FLT_MAX;
+        VS[i] = 0;
+    } 
+    dist[vertx - 1] = 0;
+
+    for (int i = 0; i < n - 1; i++){
+        int u = -1;
+        float min = FLT_MAX;
+        for (int v = 0; v < n; v++){            
+            if (VS[v] == 0 && dist[v] < min){
+                min = dist[v];
+                u = v;
+            }
+        }
+        VS[u] = 1;
+        for (int v = 0; v < n; v++){
+            if (!VS[v] && matriz[u][v] != FLT_MAX && dist[u] != FLT_MAX && dist[u] + matriz[u][v] < dist[v]){
+                dist[v] = dist[u] + matriz[u][v];
+                pai[v] = u;
+            }
+        }
+    }
+
+    fprintf(qvertice, "Distâncias mínimas a partir do vértice %d:\n", vertx );
+    for (int i = 0; i < n; i++) {
+        fprintf(qvertice, "Vértice %d, Distância: %.2f, Caminho: ", i + 1, dist[i]);
+        caminhominimo(pai, i , qvertice);
+        fprintf(qvertice, "\n");
+    }
+}
+
+void Dijkstra_Matriz_Heap(float** matriz, int vertx, int n, FILE* qvertice) {
+    float* dist = (float*)malloc(n * sizeof(float));
+    int* pai = (int*)malloc(n * sizeof(int));
+    int* VS = (int*)calloc(n, sizeof(int));
+    MinHeap* minHeap = createMinHeap(n); // criando heap
+
+    for (int i = 0; i < n; i++) {
+        pai[i] = -1;
+        dist[i] = FLT_MAX;
+        minHeap->array[i] = (MinHeapNode){i, dist[i]};
+        minHeap->pos[i] = i; // mapeia a posição do nó no heap
+    }
+
+    dist[vertx - 1] = 0;
+    minHeap->array[vertx - 1].key = 0;
+
+    decreaseKey(minHeap, vertx - 1, dist[vertx - 1]);
+    minHeap->size = n; 
+
+    while (!isEmpty(minHeap)) {
+        MinHeapNode minNode = extractMin(minHeap);
+        int u = minNode.vertex;
+        VS[u] = 1;
+
+
+        for (int v = 0; v < n; v++) {
+            if (!VS[v] && matriz[u][v] != FLT_MAX && dist[u] + matriz[u][v] < dist[v]) {
+                dist[v] = dist[u] + matriz[u][v];
+                pai[v] = u;
+                decreaseKey(minHeap, v, dist[v]); // Atualiza o nó na min-heap
+            }
+        }
+    }
+
+    fprintf(qvertice, "Distâncias mínimas a partir do vértice %d:\n", vertx);
+    for (int i = 0; i < n; i++) {
+        fprintf(qvertice, "Vértice %d, Distância: %.2f, Caminho: ", i + 1, dist[i]);
+        caminhominimo(pai, i, qvertice); // chama a função para imprimir o caminho mínimo
+        fprintf(qvertice, "\n");
+    }
+
+    free(dist);
+    free(pai);
+    free(VS);
+    free(minHeap->array);
+    free(minHeap->pos);
+    free(minHeap);
+}
+
