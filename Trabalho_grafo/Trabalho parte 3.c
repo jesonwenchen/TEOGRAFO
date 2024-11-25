@@ -20,7 +20,7 @@ void criando_lista_fluxo(Node** adjList, int a, int b, int fluxo, int capacidade
     adjList[a] = no;
 }
 
-// Função para criar a lista de adjacência a partir de um arquivo
+// Função para criar a lista de adjacência
 Node** lista(FILE* grafo, int* n) {
     if (fscanf(grafo, "%d", n) != 1) {
         printf("Erro ao ler o número de vértices\n");
@@ -72,7 +72,7 @@ int Gargalo(Node** adjList, int* caminho, int tamanhoCaminho) {
             if (atual->vertex == destino) {
                 int caparesidual = atual->capacidade - atual->fluxo;
                 if (caparesidual < menorcap) {
-                    menorcap = caparesidual;
+                    menorcap = caparesidual; // atualizando o gargalo
                 }
                 break;
             }
@@ -124,13 +124,13 @@ int* DFS_Caminho(Node** lista, int origem, int destino, int n, int* tamanhoCamin
 
     int* caminho = (int*)malloc(n * sizeof(int));
     int idx = 0;
-    for (int v = destino; v != -1; v = pai[v]) {
+    for (int v = destino; v != -1; v = pai[v]) { // encontrando o caminho ao contrário
         caminho[idx++] = v;
     }
 
     *tamanhoCaminho = idx;
 
-    for (int i = 0; i < idx / 2; i++) {
+    for (int i = 0; i < idx / 2; i++) { // revertendo o caminho
         int temp = caminho[i];
         caminho[i] = caminho[idx - i - 1];
         caminho[idx - i - 1] = temp;
@@ -185,8 +185,8 @@ int FordFulkerson(Node** Original, Node** Residual, int source, int target, int 
         int tamanhoCaminho;
         int* caminho = DFS_Caminho(Residual, source - 1, target - 1, n, &tamanhoCaminho);
 
-        if (caminho == NULL) {
-            break;
+        if (caminho == NULL) { 
+            break; // não há mais caminho aumentante
         }
 
         int gargalo = Gargalo(Residual, caminho, tamanhoCaminho);
@@ -199,7 +199,7 @@ int FordFulkerson(Node** Original, Node** Residual, int source, int target, int 
     return fluxoMaximo;
 }
 
-void imprimirFluxos(Node** adjList, int numVertices, FILE* qvertice) {
+void imprimirFluxos(Node** adjList, int numVertices, FILE* qvertice) { //Função para imprimir o fluxo em cada aresta
     fprintf(qvertice, "Fluxos em cada aresta:\n");
     for (int i = 0; i < numVertices; i++) {
         Node* atual = adjList[i];
