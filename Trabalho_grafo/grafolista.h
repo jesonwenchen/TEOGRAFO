@@ -39,7 +39,7 @@ Node** lista_peso(FILE*grafo, int* n, FILE* qvertice)
 
 void Dijkstra_Lista(Node* lista[], int vertx, int n, FILE*qvertice)
 
-void Dijkstra_Matriz_Heap(float** matriz, int vertx, int n, FILE* qvertice)
+void Dijkstra_Lista_Heap(float** matriz, int vertx, int n, FILE* qvertice)
 
 
 
