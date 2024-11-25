@@ -6,6 +6,8 @@
 #include <time.h>
 #include "grafolista.h"
 #include "fila.h"
+#include "Minheap.h"
+
 
 void DFScompLista(Node* lista[], int vertice, int visitados[], int componenteatual[], int numcomp, FILE* qvertice, int* tamanhoC){
     visitados[vertice] = 1;
