@@ -381,3 +381,148 @@ void Graus_Lista(FILE* qvertice, int n, Node* listaadj[]){
     fprintf(qvertice, "O grau medio do grafo é: %d\n", media);   
     fprintf(qvertice, "O número de vértices é: %d\n", n);
 }
+
+void criando_lista_peso(Node** adjList, int a, int b, float peso) {// Função para adicionar um vértice à lista de adjacência
+    Node* no = (Node*)malloc(sizeof(Node));
+    no->vertex = b;
+    no->peso = peso;
+    Node* current = adjList[a];
+    while (current != NULL) {
+        if (current->vertex == b) {
+            // Se o vértice já existe na lista, sai da função
+            return;
+        }
+        current = current->next;
+    }
+    no->next = adjList[a];
+    adjList[a] = no;
+}
+
+Node** lista_peso(FILE*grafo, int* n, FILE* qvertice){
+    if (grafo == NULL){
+        printf("Erro ao abrir\n");
+    }
+    if (fscanf(grafo, "%d", n) != 1){
+        printf("Erro ao ler o número de vértices\n");
+        return NULL;
+    }    
+    Node** lista = (Node**)malloc(*n * sizeof(Node*));
+    for (int i = 0; i< *n ; i++){
+        lista[i] = NULL;
+    }
+    int origem, destino;
+    float peso;
+    while (fscanf(grafo, "%d %d %f", &origem, &destino, &peso) == 3) {
+        if (peso < 0){ 
+            fprintf(qvertice, "A biblioteca ainda não implementa caminhos mínimos com pesos negativos \n");
+            return NULL; 
+        } 
+        else {
+        criandolista(lista, origem - 1, destino - 1, peso);
+        criandolista(lista, destino - 1, origem - 1, peso); 
+        }
+    }
+    return lista;
+}
+
+void Dijkstra_Lista(Node* lista[], int vertx, int n, FILE*qvertice){
+    float* dist = (float*)malloc(n * sizeof(float));
+    int* VS = (int*)malloc(n * sizeof(int));
+    int* pai = (int*)malloc(n * sizeof(int));
+
+    for (int i = 0; i < n; i++){
+        pai[i] = -1;
+        dist[i] = FLT_MAX;
+        VS[i] = 0;
+    } 
+    dist[vertx - 1] = 0;
+
+    for (int i = 0; i < n - 1; i++){
+        int u = -1;
+        float min = FLT_MAX;
+        for (int v = 0; v < n; v++){            
+            if (VS[v] == 0 && dist[v] < min){
+                min = dist[v];
+                u = v;
+            }
+        }
+
+        VS[u] = 1;
+
+        Node* ponteiro = lista[u];
+        while(ponteiro!=NULL){
+            int v = ponteiro -> vertex; 
+            float peso = ponteiro -> peso;
+            if (!VS[v] && dist[u] + peso < dist[v]){
+                dist[v] = dist[u] + peso;
+                pai[v] = u;
+            }
+            ponteiro = ponteiro -> next;
+        }
+    }
+
+    fprintf(qvertice, "Distâncias mínimas a partir do vértice %d:\n", vertx );
+    for (int i = 0; i < n; i++) {
+        fprintf(qvertice, "Vértice %d, Distância: %.2f, Caminho: ", i + 1, dist[i]);
+        caminhominimo(pai, i , qvertice);
+        fprintf(qvertice, "\n");
+    }
+
+    free(dist);
+    free(VS);
+    free(pai);
+}
+
+void Dijkstra_Lista_Heap(Node* lista[], int vertx, int n, FILE* qvertice) {
+
+    float* dist = (float*)malloc(n * sizeof(float));
+    int* pai = (int*)malloc(n * sizeof(int));
+    int* VS = (int*)calloc(n, sizeof(int)); 
+    MinHeap* minHeap = createMinHeap(n);
+
+    for (int i = 0; i < n; i++) {
+        pai[i] = -1;
+        dist[i] = FLT_MAX;
+        minHeap->array[i] = (MinHeapNode){i, dist[i]};
+        minHeap->pos[i] = i;
+    }
+
+    dist[vertx - 1] = 0;
+    minHeap->array[vertx - 1].key = 0;
+    decreaseKey(minHeap, vertx - 1, dist[vertx - 1]);
+    minHeap->size = n;
+
+    while (!isEmpty(minHeap)) {
+        MinHeapNode minNode = extractMin(minHeap);
+        int u = minNode.vertex;
+        VS[u] = 1;
+
+        Node* ponteiro = lista[u];
+        while (ponteiro != NULL) {
+            int v = ponteiro->vertex;
+            float peso = ponteiro->peso;
+
+            if (!VS[v] && dist[u] + peso < dist[v]) {
+                dist[v] = dist[u] + peso;
+                pai[v] = u;
+                decreaseKey(minHeap, v, dist[v]);
+            }
+            ponteiro = ponteiro->next;
+        }
+    }
+
+    fprintf(qvertice, "Distâncias mínimas a partir do vértice %d:\n", vertx);
+    for (int i = 0; i < n; i++) {
+        fprintf(qvertice, "Vértice %d, Distância: %.2f, Caminho: ", i + 1, dist[i]);
+        caminhominimo(pai, i, qvertice);
+        fprintf(qvertice, "\n");
+    }
+
+    free(dist);
+    free(pai);
+    free(VS);
+    free(minHeap->array);
+    free(minHeap);
+}
+
+
