@@ -6,6 +6,8 @@
 #include <limits.h>
 #include "fila.h"
 #include <float.h>
+#include "Minheap.h"
+
 
 void DFSrealComponentes(int** matriz, int* visitados, int vertice, int n, int* componentes, int compIndex, int* tamanhoComp) {
     visitados[vertice] = 1; // marcando como visitado
