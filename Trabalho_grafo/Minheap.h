@@ -27,4 +27,6 @@ void decreaseKey(MinHeap* minHeap, int vertex, float key);
 
 bool isEmpty(MinHeap* minHeap);
 
+void caminhominimo(int* pai, int vAtual, FILE* qvertice);
+
 #endif
