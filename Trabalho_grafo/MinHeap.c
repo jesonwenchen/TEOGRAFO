@@ -75,3 +75,15 @@ void decreaseKey(MinHeap* minHeap, int vertex, float key) {
 bool isEmpty(MinHeap* minHeap) {
     return minHeap->size == 0;
 }
+
+void caminhominimo(int* pai, int vAtual, FILE* qvertice) {
+    if (pai[vAtual] == -1){
+        fprintf(qvertice,"%d",vAtual + 1);
+        return; // para nao continuar mais
+    }
+    caminhominimo(pai, pai[vAtual], qvertice);
+    fprintf(qvertice, " -> %d", vAtual + 1);
+    
+}
+
+
