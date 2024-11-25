@@ -30,4 +30,10 @@ void Graus_Matriz(FILE* qvertice, int n, int** matrizadj);
 
 int** Matriz_Sem_Peso(FILE*grafo, int* n, FILE* qvertice);
 
+float** matrizpeso(FILE*grafo, int* n, FILE* qvertice);
+
+void Dijkstra_Matriz(float**matriz, int vertx, int n, FILE*qvertice);
+
+void Dijkstra_Matriz_Heap(float** matriz, int vertx, int n, FILE* qvertice);
+
 #endif
